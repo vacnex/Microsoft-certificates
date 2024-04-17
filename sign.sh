@@ -15,11 +15,13 @@ git clone https://github.com/hoaug-tran/Microsoft-certificates.git
 mkdir ~/efikeys
 cd efikeys
 
-openssl req -new -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes -subj "/CN=VN2024 PK Platform Key/" -keyout PK.key -out PK.pem
+random_chars=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 4)
 
-openssl req -new -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes -subj "/CN=VN2024 KEK Exchange Key/" -keyout KEK.key -out KEK.pem
+openssl req -new -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes -subj "/CN=$random_chars PK Platform Key/" -keyout PK.key -out PK.pem
 
-openssl req -new -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes -subj "/CN=VN2024 ISK Image Signing Key/" -keyout ISK.key -out ISK.pem
+openssl req -new -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes -subj "/CN=$random_chars KEK Exchange Key/" -keyout KEK.key -out KEK.pem
+
+openssl req -new -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes -subj "/CN=$random_chars ISK Image Signing Key/" -keyout ISK.key -out ISK.pem
 
 chmod 0600 *.key
 
