@@ -50,13 +50,13 @@ mkdir oc
 cp ISK.key ISK.pem oc
 cd oc
 
-LINK="https://github.com/acidanthera/OpenCorePkg/releases/download/0.9.9/OpenCore-0.9.9-RELEASE.zip"
+LINK="https://github.com/wjz304/OpenCore_NO_ACPI_Build/releases/download/1.0.0_54ba2bf/OpenCore-Mod-1.0.0-RELEASE.zip"
 
-VERSION="0.9.9"
+VERSION="1.0.0"
 
 wget $LINK
-unzip "OpenCore-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
-rm "OpenCore-${VERSION}-RELEASE.zip"
+unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
 
