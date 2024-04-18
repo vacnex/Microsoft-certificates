@@ -50,47 +50,45 @@ mkdir oc
 cp ISK.key ISK.pem oc
 cd oc
 
-# Function to get the latest URL of OpenCorePkg release
 _get_opencore_url() {
     local urlsource=$(curl -s "https://api.github.com/repos/acidanthera/OpenCorePkg/releases/latest" | grep "browser_download_url")
     local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
+    local version=$(basename "$url" | sed 's/OpenCore-\(.*\)-RELEASE.zip/\1/')
     echo "$url"
+    echo "$version"
 }
 
-# Function to get the latest URL of Opencore-Mod release
 _get_opencore_mod_url() {
     local urlsource=$(curl -s "https://api.github.com/repos/wjz304/OpenCore_NO_ACPI_Build/releases/latest" | grep "browser_download_url")
     local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
+    local version=$(basename "$url" | sed 's/OpenCore-Mod-\(.*\)-RELEASE.zip/\1/')
     echo "$url"
+    echo "$version"
 }
 
-echo "Ban dang su dung Opencore hay Opencore No ACPI:"
+echo "Chon phien ban Opencore ban muon sign:"
 options=("OpenCorePkg" "Opencore-No-ACPI")
 select opt in "${options[@]}"
 do
     case $opt in
         "OpenCorePkg")
-            echo "Nhap phien ban ( version ) cua Opencore / Opencore No ACPI:"
-            read VERSION
-            LINK=$(_get_opencore_url)
-            wget "$LINK" -O "OpenCore-${VERSION}-RELEASE.zip"
-            unzip "OpenCore-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
-            rm "OpenCore-${VERSION}-RELEASE.zip"
-            break
+            echo "Dang tai URL moi nhat cua OpenCorePkg..."
+            read LINK VERSION <<<"$(_get_opencore_url)"
             ;;
         "Opencore-No-ACPI")
-            echo "Nhap phien ban ( version ) cua Opencore / Opencore No ACPI:"
-            read VERSION
-            LINK=$(_get_opencore_mod_url)
-            wget "$LINK" -O "OpenCore-Mod-${VERSION}-RELEASE.zip"
-            unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
-            rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
-            break
+            echo "Dang tai URL moi nhat cua Opencore-NO-ACPI..."
+            read LINK VERSION <<<"$(_get_opencore_mod_url)"
             ;;
-        *) echo "Lua chon khong hop le. Vui long chon lai !";;
+        *) echo "Lua chon khong hop le. Vui long nhap lai. !";;
     esac
 done
 
+echo "Dang tai va giai nen $LINK..."
+wget "$LINK" -O "temp.zip"
+unzip "temp.zip" "X64/*" -d "./Downloaded"
+rm "temp.zip"
+
+echo "Tai va giai nen thanh cong!"
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
 
