@@ -64,42 +64,33 @@ _get_opencore_mod_url() {
     echo "$url"
 }
 
-# Show menu
-echo "Chon phien ban Opencore ban muon Sign:"
-options=("OpenCorePkg" "Opencore-Mod")
+echo "Ban dang su dung Opencore hay Opencore No ACPI:"
+options=("OpenCorePkg" "Opencore-No-ACPI")
 select opt in "${options[@]}"
 do
     case $opt in
         "OpenCorePkg")
-            echo "Ban da chon Opencore"
+            echo "Nhap phien ban ( version ) cua Opencore / Opencore No ACPI:"
+            read VERSION
             LINK=$(_get_opencore_url)
+            wget "$LINK" -O "OpenCore-${VERSION}-RELEASE.zip"
+            unzip "OpenCore-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+            rm "OpenCore-${VERSION}-RELEASE.zip"
             break
             ;;
-        "Opencore-Mod")
-            echo "Ban da chon Opencore No ACPI"
+        "Opencore-No-ACPI")
+            echo "Nhap phien ban ( version ) cua Opencore / Opencore No ACPI:"
+            read VERSION
             LINK=$(_get_opencore_mod_url)
+            wget "$LINK" -O "OpenCore-Mod-${VERSION}-RELEASE.zip"
+            unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+            rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
             break
             ;;
         *) echo "Lua chon khong hop le. Vui long chon lai !";;
     esac
 done
 
-# Yêu cầu người dùng nhập phiên bản
-echo "Nhap phien ban ( version ) cua Opencore / Opencore No ACPI:"
-read VERSION
-
-# Kiểm tra xem đường link có chứa "Opencore-Mod" hay không
-if [[ $LINK == *"Opencore-Mod"* ]]; then
-    echo "Opencore No ACPI"
-    wget "$LINK"
-    unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
-    rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
-else
-    echo "Opencore"
-    wget "$LINK"
-    unzip "OpenCore-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
-    rm "OpenCore-${VERSION}-RELEASE.zip"
-fi
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
 
