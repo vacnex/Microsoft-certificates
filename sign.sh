@@ -50,13 +50,56 @@ mkdir oc
 cp ISK.key ISK.pem oc
 cd oc
 
-LINK="https://github.com/wjz304/OpenCore_NO_ACPI_Build/releases/download/1.0.0_54ba2bf/OpenCore-Mod-1.0.0-RELEASE.zip"
+# Function to get the latest URL of OpenCorePkg release
+_get_opencore_url() {
+    local urlsource=$(curl -s "https://api.github.com/repos/acidanthera/OpenCorePkg/releases/latest" | grep "browser_download_url")
+    local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
+    echo "$url"
+}
 
-VERSION="1.0.0"
+# Function to get the latest URL of Opencore-Mod release
+_get_opencore_mod_url() {
+    local urlsource=$(curl -s "https://api.github.com/repos/wjz304/OpenCore_NO_ACPI_Build/releases/latest" | grep "browser_download_url")
+    local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
+    echo "$url"
+}
 
-wget $LINK
-unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
-rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
+# Show menu
+echo "Chon phien ban Opencore ban muon Sign:"
+options=("OpenCorePkg" "Opencore-Mod")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "OpenCorePkg")
+            echo "Ban da chon Opencore"
+            LINK=$(_get_opencore_url)
+            break
+            ;;
+        "Opencore-Mod")
+            echo "Ban da chon Opencore No ACPI"
+            LINK=$(_get_opencore_mod_url)
+            break
+            ;;
+        *) echo "Lua chon khong hop le. Vui long chon lai !";;
+    esac
+done
+
+# Yêu cầu người dùng nhập phiên bản
+echo "Nhap phien ban ( version ) cua Opencore / Opencore No ACPI:"
+read VERSION
+
+# Kiểm tra xem đường link có chứa "Opencore-Mod" hay không
+if [[ $LINK == *"Opencore-Mod"* ]]; then
+    echo "Opencore No ACPI"
+    wget "$LINK"
+    unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+    rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
+else
+    echo "Opencore"
+    wget "$LINK"
+    unzip "OpenCore-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+    rm "OpenCore-${VERSION}-RELEASE.zip"
+fi
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
 
