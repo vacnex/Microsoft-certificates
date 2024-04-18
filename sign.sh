@@ -89,5 +89,5 @@ find ./Downloaded/X64/EFI/**/* -type f -name "*.efi" ! -name '.*' | cut -c 3- | 
 
 # Clean
 rm -rf Downloaded
-echo "Cleaned..."
-echo "Thank you perez987, khronokernel, profzei, sakaki, Andrew Blitss and Ubuntu for your contributions to creating this automated command"
+echo "Don dep thanh cong..."
+echo -e "Thank you perez987, khronokernel, profzei, sakaki, Andrew Blitss and Ubuntu\nfor your contributions to creating this automated command"
