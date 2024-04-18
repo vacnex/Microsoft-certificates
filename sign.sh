@@ -51,44 +51,42 @@ cp ISK.key ISK.pem oc
 cd oc
 
 _get_opencore_url() {
-    local urlsource=$(curl -s "https://github.com/acidanthera/OpenCorePkg/releases/latest" | grep -o 'https://github.com/acidanthera/OpenCorePkg/releases/download/.*RELEASE.zip')
-    local url=$(echo "$urlsource" | head -n 1)
-    local version=$(echo "$url" | sed 's/.*OpenCore-\(.*\)-RELEASE.zip/\1/')
+    local urlsource=$(curl -s "https://api.github.com/repos/acidanthera/OpenCorePkg/releases/latest" | grep "browser_download_url")
+    local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
     echo "$url"
-    echo "$version"
 }
 
+# Function to get the latest URL of Opencore-Mod release
 _get_opencore_mod_url() {
-    local urlsource=$(curl -s "https://github.com/wjz304/OpenCore_NO_ACPI_Build/releases/latest" | grep -o 'https://github.com/wjz304/OpenCore_NO_ACPI_Build/releases/download/.*RELEASE.zip')
-    local url=$(echo "$urlsource" | head -n 1)
-    local version=$(echo "$url" | sed 's/.*OpenCore-Mod-\(.*\)-RELEASE.zip/\1/')
+    local urlsource=$(curl -s "https://api.github.com/repos/wjz304/OpenCore_NO_ACPI_Build/releases/latest" | grep "browser_download_url")
+    local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
     echo "$url"
-    echo "$version"
 }
 
-echo "Chọn phiên bản Opencore bạn muốn sign:"
+echo "Ban dang su dung Opencore hay Opencore No ACPI:"
 options=("OpenCorePkg" "Opencore-No-ACPI")
 select opt in "${options[@]}"
 do
     case $opt in
         "OpenCorePkg")
-            echo "Đang tải URL mới nhất của OpenCorePkg..."
-            read LINK VERSION <<<"$(_get_opencore_url)"
+            LINK=$(_get_opencore_url)
+            VERSION=$(basename "$LINK" | sed 's/OpenCore-//; s/-RELEASE.zip//')
+            wget "$LINK" -O "OpenCore-${VERSION}-RELEASE.zip"
+            unzip "OpenCore-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+            rm "OpenCore-${VERSION}-RELEASE.zip"
+            break
             ;;
         "Opencore-No-ACPI")
-            echo "Đang tải URL mới nhất của Opencore-NO-ACPI..."
-            read LINK VERSION <<<"$(_get_opencore_mod_url)"
+            LINK=$(_get_opencore_mod_url)
+            VERSION=$(basename "$LINK" | sed 's/OpenCore-Mod-//; s/-RELEASE.zip//')
+            wget "$LINK" -O "OpenCore-Mod-${VERSION}-RELEASE.zip"
+            unzip "OpenCore-Mod-${VERSION}-RELEASE.zip" "X64/*" -d "./Downloaded"
+            rm "OpenCore-Mod-${VERSION}-RELEASE.zip"
+            break
             ;;
-        *) echo "Lựa chọn không hợp lệ. Vui lòng chọn lại !";;
+        *) echo "Lua chon sai, vui long chon lai!";;
     esac
 done
-
-echo "Đang tải và giải nén $LINK..."
-wget "$LINK" -O "temp.zip"
-unzip "temp.zip" "X64/*" -d "./Downloaded"
-rm "temp.zip"
-
-echo "Tải và giải nén thành công!"
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
 
