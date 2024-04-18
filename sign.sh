@@ -25,7 +25,7 @@ chmod 0600 *.key
 
 cp /home/$USER/Microsoft-certificates/MicCorUEFCA2011_2011-06-27.crt ~/efikeys/
 
-cp /home/$USER/Microsoft-certificates/MicCorUEFCA2011_2011-06-27.crt ~/efikeys/
+cp /home/$USER/Microsoft-certificates/MicWinProPCA2011_2011-10-19.crt ~/efikeys/
 
 openssl x509 -in MicWinProPCA2011_2011-10-19.crt -inform DER -out MicWinProPCA2011_2011-10-19.pem -outform PEM
 
