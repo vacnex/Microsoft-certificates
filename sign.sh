@@ -76,6 +76,7 @@ do
 done
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
+wget https://github.com/hoaug-tran/Microsoft-certificates/raw/main/refind_x64.efi -O ./Downloaded/X64/EFI/OC/refind_x64.efi
 
 if [ -f "./ISK.key" ]; then
     echo "ISK.key was decrypted successfully"
