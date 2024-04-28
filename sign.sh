@@ -39,7 +39,7 @@ cp ISK.key ISK.pem oc
 cd oc
 
 _get_opencore_url() {
-    local urlsource=$(curl -s "https://api.github.com/repos/acidanthera/OpenCorePkg/releases/latest" | grep "browser_download_url")
+    local urlsource=$(curl -s "https://github.com/acidanthera/OpenCorePkg/releases/tag/0.8.8" | grep "browser_download_url")
     local url=$(echo "$urlsource" | grep "RELEASE.zip" | head -n 1 | cut -d '"' -f 4)
     echo "$url"
 }
