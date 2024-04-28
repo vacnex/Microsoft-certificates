@@ -76,7 +76,7 @@ do
 done
 
 wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/HfsPlus.efi -O ./Downloaded/X64/EFI/OC/Drivers/HfsPlus.efi
-wget https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/ext4_x64.efi -O ./Downloaded/X64/EFI/OC/Drivers/ext4_x64.efi
+wget https://github.com/acidanthera/OcBinaryData/raw/master/Drivers/ext4_x64.efi -O ./Downloaded/X64/EFI/OC/Drivers/ext4_x64.efi
 wget https://github.com/hoaug-tran/Microsoft-certificates/raw/main/refind_x64.efi -O ./Downloaded/X64/EFI/OC/refind_x64.efi
 
 
